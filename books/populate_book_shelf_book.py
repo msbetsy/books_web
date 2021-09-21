@@ -42,6 +42,7 @@ with open(CSV_DIR, encoding='utf-8') as f:
             pages=fake.random_int(100, 1000),
             year=row[5],
             genre=book_genre,
+            status='published',
             cover=imagine,
         )[0]
         object.save()
