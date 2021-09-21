@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/books.css' %}" rel="stylesheet">
+</head>
+<body>
+<h2>
+    {{ book.title }}
+    {{ book.year }}
+</h2>
+</body>
+</html>
