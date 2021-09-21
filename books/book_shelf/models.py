@@ -2,6 +2,18 @@ from django.db import models
 
 
 # Create your models here.
+class PublishedManager(models.Manager):
+    """Customized manager -> show only published books."""
+
+    def get_queryset(self):
+        """Find all books with status published.
+
+        :return: Filtered books.
+        :rtype: list
+        """
+        return super().get_queryset().filter(status='published')
+
+
 class Book(models.Model):
     """Add books from csv file to Book model."""
 
@@ -25,6 +37,8 @@ class Book(models.Model):
     genre = models.CharField(max_length=256, choices=GENRE_CHOICES)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     cover = models.ImageField(upload_to="images", blank=True)
+    objects = models.Manager()  # Default manager.
+    published = PublishedManager()  # Customized manager.
 
     class Meta:
         ordering = ('-year',)
