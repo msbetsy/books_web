@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 # Create your models here.
@@ -45,3 +46,8 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        """Create canonical URL."""
+
+        return reverse('shelf:book_info', args=[self.year, self.id])
