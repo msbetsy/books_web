@@ -5,8 +5,10 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-CSV_DIR = os.path.join(BASE_DIR, 'bestsellers_with_categories.csv')
-IMAGE_DIR = os.path.join(BASE_DIR, 'images')
+CSV_DIR = os.path.join(BASE_DIR, 'populate_models_data/bestsellers_with_categories.csv')
+IMAGE_DIR_DB = 'static/book_shelf/images/images_books'
+IMAGE_DIR = 'book_shelf/static/book_shelf/images/images_books'
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'books.settings')
 
 import django
@@ -23,8 +25,10 @@ with open(CSV_DIR, encoding='utf-8') as f:
     header = next(reader)
     img_number = 0
     for row in reader:
-        filename = [str(os.path.join(IMAGE_DIR, 'filename')), str(img_number), ".jpg"]
+        filename = [IMAGE_DIR, '/filename', str(img_number), ".jpg"]
+        filename_db = [IMAGE_DIR_DB, '/filename', str(img_number), ".jpg"]
         imagine = urllib.request.urlretrieve("https://picsum.photos/200/300", ''.join(filename))[0]
+        imagine_db = ''.join(filename_db)
         fake = Faker()
         book_genre = ""
         if row[6] == "Non Fiction":
@@ -43,7 +47,7 @@ with open(CSV_DIR, encoding='utf-8') as f:
             year=row[5],
             genre=book_genre,
             status='published',
-            cover=imagine,
+            cover=imagine_db,
         )[0]
         object.save()
         img_number += 1

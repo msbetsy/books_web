@@ -1,5 +1,10 @@
+import os
+from pathlib import Path
 from django.db import models
 from django.urls import reverse
+
+BASE_DIR = Path(__file__).resolve().parent
+COVER_DIR = "static/book_shelf/images/images_books"
 
 
 # Create your models here.
@@ -13,6 +18,11 @@ class PublishedManager(models.Manager):
         :rtype: list
         """
         return super().get_queryset().filter(status='published')
+
+
+from django.core.files.storage import FileSystemStorage
+
+key_store = FileSystemStorage(location=BASE_DIR)
 
 
 class Book(models.Model):
@@ -37,7 +47,8 @@ class Book(models.Model):
     year = models.IntegerField()
     genre = models.CharField(max_length=256, choices=GENRE_CHOICES)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
-    cover = models.ImageField(upload_to="images", blank=True)
+    cover = models.ImageField(storage=key_store, upload_to=COVER_DIR, blank=False,
+                              default='static/book_shelf/images/images_books/no_cover.jpg')
     objects = models.Manager()  # Default manager.
     published = PublishedManager()  # Customized manager.
 
